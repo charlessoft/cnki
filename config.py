@@ -23,7 +23,7 @@ LinID=''
 dbpath = 'sqlite:///./res/spider.db'
 
 # 间隔5小时继续跑
-interval = 3600*5
+interval = 900
 
 
 # 配置爬虫地址 for v1(
