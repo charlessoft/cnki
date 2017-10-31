@@ -49,7 +49,7 @@ def query_crawl_success(model, urls):
 def save_crawl_result(model, res):
     try:
         if not session.query(
-                exists().where(and_(model.url == res['url']))).scalar():
+                exists().where(and_(model.url == res['url'],model.state == res['state']))).scalar():
             session.add(model(year=res['year'], issue=res['issue'], url=res['url'],
                               title=res['title'],
                               author=res['author'],

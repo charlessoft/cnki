@@ -39,7 +39,7 @@ class Spider(object):
                                'Origin': 'http://navi.cnki.net',
                                })
         self.lid = ''
-
+        self.state = True
         self.start_url = dest_url
         logger.info("start_url: {}".format(self.start_url))
         # 期刊名字
@@ -101,6 +101,7 @@ class Spider(object):
                 return r
         except Exception, e:
             logger.error('{}, {},{}'.format(e, url, e.message))
+            self.state = False
             return False
 
     def onstart(self):
@@ -233,21 +234,20 @@ class Spider(object):
         title = self.validateTitle(kwargs['filename']) + ".pdf"
         filename = u'{}'.format(os.path.join(savefolder, title))
         # logger.error (response.status_code)
-        filelen=response.headers.get('Content-Length',1000)
+        filelen = response.headers.get('Content-Length', 1000)
         logger.info("len: {} ".format(filelen))
         if int(filelen) <= 1000:
-        	logger.info("fail......fail....")
-        	raise Exception("error filelen < 1000,may be error")
-        else:
-        	logger.info("okkadkakdakd")
-        # if len(response.content)< 500:
-        # 	raise "error len < 500"
+            logger.info("fail......fail....")
+            self.state = False
+            raise Exception("error filelen < 1000,may be error")
+
         logger.info("SSSDADADAD+#!@#@##")
         try:
             f = open(filename, 'wb')
             f.write(response.content)
             f.close()
         except Exception, e:
+            self.state=False
             logger.error('write file error: ' + title + e)
             try:
                 f = open('download.pdf', 'wb')
@@ -320,7 +320,7 @@ class Spider(object):
             'keyword': keyword,
             'year': kwargs['year'],
             'issue': kwargs['issue'],
-            'state': True  # 有坑.
+            'state': self.state
         }
         # utils.append_to_csv("{}/{}.csv".format(savefolder, self.periodcical_name), result)
 
