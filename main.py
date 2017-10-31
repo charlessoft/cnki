@@ -238,14 +238,14 @@ class Spider(object):
         logger.info("len: {} ".format(filelen))
         if int(filelen) <= 1000:
             logger.info(response.content)
-            logger.info(u"fail......fail...下载次数太多.等待{}秒重新下载".format(config.interval))
+            logger.info(u"fail......fail...下载次数太多.等待{}秒重新下载 :(".format(config.interval))
             time.sleep(int(config.interval))
             logger.info("sleep interval ....ok exit")
             sys.exit(1)
-            self.state = False
-            raise Exception("error filelen < 1000,may be error")
+            # self.state = False
+            # raise Exception("error filelen < 1000,may be error")
 
-        logger.info("SSSDADADAD+#!@#@##")
+        logger.info("file download ok! :)")
         try:
             f = open(filename, 'wb')
             f.write(response.content)
