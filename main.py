@@ -232,6 +232,12 @@ class Spider(object):
         """
         title = self.validateTitle(kwargs['filename']) + ".pdf"
         filename = u'{}'.format(os.path.join(savefolder, title))
+        # logger.error (response.status_code)
+        len=response.headers.get('Content-Length',1000)
+        if len <=1000:
+        	raise "error len < 1000,may be error"
+        # if len(response.content)< 500:
+        # 	raise "error len < 500"
         try:
             f = open(filename, 'wb')
             f.write(response.content)
