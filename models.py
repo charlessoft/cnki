@@ -37,7 +37,7 @@ class Periodical():
     doi = Column(String(100))
     ZTCLS = Column(String(100))
     state = Column(Boolean)
-
+    pdf = Column(Boolean)
     # year issue url title createtime updatetime content
     def __repr__(self):
         return "<Article(year='%d', issue='%s', title='%s')>" % (self.year, self.issue, self.title)
