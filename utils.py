@@ -61,7 +61,7 @@ def save_crawl_result(model, res):
                               updatetime=datetime.datetime.now()))
         else:
             res['updatetime'] = time.time()
-            session.filter(model.url == res['url']).update(res)
+            model.query.filter(model.url == res['url']).update(res)
 
         session.commit()
     except Exception, e:
