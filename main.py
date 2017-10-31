@@ -18,7 +18,7 @@ from logconfig import logger
 
 import models
 
-debug = True
+debug = False
 if debug:
     # proxy = '10.211.55.12:8888'
     # proxy = '172.16.133.42:8888'
@@ -244,8 +244,7 @@ class Spider(object):
                 f.close()
             except Exception, e:
                 logger.error(e)
-        logger.info("=======!!++!+@+@+")
-        sys.exit(1)
+
 
     def dumpres(self, result, filename, bappend=True):
         """
@@ -275,8 +274,13 @@ class Spider(object):
         doc = pq(response.content)
         pdf_url = doc(".wxBaseinfo .icon-dlpdf").attr('href')
         title = doc(".wxTitle > .title").text()
-        author = doc(".author").text()
-        summary = doc(".wxBaseinfo > p >span").text()
+        author = doc(".author").text() # 作者
+        summary = doc(".wxBaseinfo > p >span").text() # 摘要
+        fund = doc(".wxBaseinfo > p").eq(1)("a").text()
+        print fund
+        doi = doc(".wxBaseinfo > p").eq(3)("a").text()
+        print doi
+        sys.exit(1)
         organization = doc(".orgn").text()
         keyword = doc(".wxBaseinfo > p").eq(1).remove("label").text()
 
@@ -382,7 +386,7 @@ class Spider(object):
 
         self.post_detail_url()
 
-        self.download_pdf(savefolder, **kwargs)
+        self.start_download_pdf(savefolder, **kwargs)
 
     def iplogin_flush(self):
         url = "http://login.cnki.net/TopLogin/api/loginapi/IpLoginFlush?callback=jQuery111307519162754265742_{}{}&_={}{}".format(
@@ -414,7 +418,7 @@ class Spider(object):
     # for k,v in r.cookies.items():
     # 	print k,v
 
-    def download_pdf(self, savefolder, **kwargs):
+    def start_download_pdf(self, savefolder, **kwargs):
         logger.info("download_pdf")
         url = self.pdf_url
         logger.info("downoad _url: {}".format(url))
