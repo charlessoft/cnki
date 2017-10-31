@@ -16,9 +16,10 @@ import utils
 from logconfig import logger
 
 import models
-debug = False
+debug = True
 if debug:
-    proxy = '10.211.55.12:8888'
+    # proxy = '10.211.55.12:8888'
+    proxy = '172.16.133.42'
     # # ip = '10.142.54.165'
     # ip = '127.0.0.1'
     g_proxies = {'http': 'http://' + proxy, 'https': 'https://' + proxy}
