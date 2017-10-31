@@ -22,6 +22,8 @@ build_env:
 	virtualenv --no-site-packages pyenv
 	. ./pyenv/bin/activate && \
 		pip install -r requirements.txt 
+	cd ./pyenv && \
+		virtualenv --relocatable ./
 
 
 # build_env:

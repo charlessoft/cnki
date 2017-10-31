@@ -305,6 +305,8 @@ class Spider(object):
         # 下载 pdf
         self.deal_pdf_page(url, savefolder, filename=title)
         # "=======pdf"
+        if self.state == False:
+            return
 
         result = {
             'fund':fund,
