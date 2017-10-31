@@ -59,8 +59,8 @@ class Spider(object):
     def validateTitle(self, title):
         """
         过滤pdf无效名字
-        :param title: 
-        :return: 
+        :param title:
+        :return:
         """
         rstr = r"[\/\\\:\*\?\"\<\>\|]"  # '/\:*?"<>|'
         new_title = re.sub(rstr, "", title)
@@ -365,7 +365,7 @@ class Spider(object):
 
     def getlogo_gif(self):
         """
-        获取登录cookie cnki
+        获取登录cookie sid_kns
         :return:
         """
         url = "http://kns.cnki.net/kns/images/gb/logo.gif"
@@ -432,7 +432,7 @@ class Spider(object):
     def start_download_pdf(self, savefolder, **kwargs):
         logger.info("download_pdf")
         url = self.pdf_url
-        logger.info("downoad _url: {}".format(url))
+        logger.info("downoad pdf url: {}".format(url))
         payload = {}
         self.crawl_url(url, 'get', '', self.down_pdf, savefolder, **kwargs)
 
@@ -454,7 +454,7 @@ if __name__ == '__main__':
             s.onstart()
             #     logger.info(u"采集完毕,休息{}秒".format(config.interval))
             #     #time.sleep(config.interval)
-            #     time.sleep(int(config.interval))
+            time.sleep(int(config.interval))
 
 
             # time.sleep(1)
