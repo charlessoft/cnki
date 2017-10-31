@@ -237,6 +237,7 @@ class Spider(object):
         filelen = response.headers.get('Content-Length', 1000)
         logger.info("len: {} ".format(filelen))
         if int(filelen) <= 1000:
+            logger.info(response.content)
             logger.info(u"fail......fail...下载次数太多.等待{}秒重新下载".format(config.interval))
             time.sleep(int(config.interval))
             logger.info("sleep interval ....ok exit")
