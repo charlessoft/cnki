@@ -58,7 +58,12 @@ def save_crawl_result(model, res):
                               keyword=res['keyword'],
                               state=res['state'],
                               createtime=datetime.datetime.now(),
-                              updatetime=datetime.datetime.now()))
+                              fund=res['fund'],
+                              doi=res['doi'],
+                              ZTCLS=res['ZTCLS'],
+                              pdf=res['pdf'],
+                              updatetime=datetime.datetime.now()),
+                              )
         else:
             res['updatetime'] = time.time()
             model.query.filter(model.url == res['url']).update(res)

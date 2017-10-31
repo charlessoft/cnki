@@ -238,6 +238,9 @@ class Spider(object):
         logger.info("len: {} ".format(filelen))
         if int(filelen) <= 1000:
             logger.info("fail......fail....")
+            time.sleep(int(config.interval))
+            logger.info("sleep interval ....ok exit")
+            sys.exit(1)
             self.state = False
             raise Exception("error filelen < 1000,may be error")
 
