@@ -1,7 +1,7 @@
 cp:
-	scp -r ../cnki root@192.168.4.10:/tmp
+	scp -r ../cnki root@192.168.4.11:/tmp
 cp_release:
-	scp -r ./cnki-release.tar.gz root@192.168.4.10:/tmp
+	scp -r ./cnki-release.tar.gz root@192.168.4.11:/tmp
 
 
 clean:
@@ -11,14 +11,32 @@ clean:
 	rm -fr *.zip
 	rm -fr cnki-release.tar.gz
 	rm -fr *.log
+	mkdir ./res
+
 
 build_env:
-	cd ./depend && \
+	cd ./package/depend && \
 		python ./pip-9.0.1-py2.py3-none-any.whl/pip install pip-9.0.1-py2.py3-none-any.whl
-	cd ./depend && \
+	cd ./package/depend && \
 		pip install virtualenv-15.1.0-py2.py3-none-any.whl 
 	virtualenv --no-site-packages pyenv
-	pip instal
+	. ./pyenv/bin/activate && \
+		pip install -r requirements.txt 
+
+
+# build_env:
+# 	cd ./package/depend && \
+# 		python ./pip-9.0.1-py2.py3-none-any.whl/pip install pip-9.0.1-py2.py3-none-any.whl
+# 	cd ./package/depend && \
+# 		pip install virtualenv-15.1.0-py2.py3-none-any.whl 
+# 	virtualenv --no-site-packages pyenv
+# 	. ./pyenv/bin/activate && \
+# 		pip install -r requirements.txt && \
+# 		echo_supervisord_conf | sed -e "s#;\[include\]#\[include\]#g"  > /etc/supervisord.conf && \
+# 		echo "files=${PWD}/conf/supervisor.conf" >> /etc/supervisord.conf && \
+# 		sed -i "s|directory=.*|directory=${PWD}|g" ./conf/supervisor.conf
+
+
 
 install_source:
 	mkdir -p /opt/yrinfo 
@@ -52,7 +70,8 @@ build_zip_env:
 		--exclude=cnki/.idea \
 		./cnki
 	mv ../cnki-release.tar.gz ./
-
+push_test:
+	rsync -auvz --progress --delete . root@192.168.4.11:/tmp/cnki
 run:
 	source ./pyenv/bin/activate && \
-		python main.py
+		python main1.py

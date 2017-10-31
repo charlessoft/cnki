@@ -1,11 +1,19 @@
 # -*- coding: utf-8 -*-
 import logging
+import logging.handlers
+# logging.basicConfig(level=logging.DEBUG,
+#                     format="%(asctime)s %(threadName)s %(filename)s %(funcName)s %(lineno)s %(levelname)s - %(message)s",
+#                     datefmt='%m-%d %H:%M',
+#                     filename='spiderlog.log',
+#                     filemode='ab')
 
-logging.basicConfig(level=logging.DEBUG,
-                    format="%(asctime)s %(threadName)s %(filename)s %(funcName)s %(lineno)s %(levelname)s - %(message)s",
-                    datefmt='%m-%d %H:%M',
-                    filename='spiderlog.log',
-                    filemode='ab')
+formatter = logging.Formatter(
+    "%(asctime)s %(threadName)s %(filename)s %(funcName)s %(lineno)s %(levelname)s - %(message)s")
+fh = logging.handlers.RotatingFileHandler('spiderlog.log', maxBytes=200*1024*1024, backupCount=9)
+fh.setLevel(logging.DEBUG)
+
+fh.setFormatter(formatter)
+
 
 logger = logging.getLogger('cnki')
 # 设置logger的level为DEBUG
@@ -18,3 +26,4 @@ formatter = logging.Formatter(
 hdr.setFormatter(formatter)
 # 给logger添加上handler
 logger.addHandler(hdr)
+logger.addHandler(fh)
