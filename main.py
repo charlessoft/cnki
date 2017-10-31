@@ -274,16 +274,13 @@ class Spider(object):
         doc = pq(response.content)
         pdf_url = doc(".wxBaseinfo .icon-dlpdf").attr('href')
         title = doc(".wxTitle > .title").text()
-        author = doc(".author").text() # 作者
-        summary = doc(".wxBaseinfo > p >span").text() # 摘要
-        fund = doc(".wxBaseinfo > p").eq(1)("a").text()
-        print fund
-        doi = doc(".wxBaseinfo > p").eq(3)("a").text()
-        print doi
-        sys.exit(1)
+        author = doc(".author").text()  # 作者
+        summary = doc(".wxBaseinfo > p >span").text()  # 摘要
+        fund = doc(".wxBaseinfo > p").eq(1)("a").text()  # 基金
+        keyword = doc(".wxBaseinfo > p").eq(2).text()  # 关键字
+        doi = doc(".wxBaseinfo > p").eq(3).text()  # doi
+        ZTCLS = doc(".wxBaseinfo > p").eq(4).text()  # 分类号
         organization = doc(".orgn").text()
-        keyword = doc(".wxBaseinfo > p").eq(1).remove("label").text()
-
         url = response.url
         content = doc(".wxBaseinfo > p").text()
         self.count += 1
@@ -299,6 +296,9 @@ class Spider(object):
         # "=======pdf"
 
         result = {
+            'fund':fund,
+            'doi':doi,
+            'ZTCLS':ZTCLS,
             'title': title,
             'author': author,
             'url': url,
