@@ -33,6 +33,9 @@ class Periodical():
     createtime = Column(DateTime)
     updatetime = Column(DateTime)
     # content = Column(String(10000))
+    fund = Column(String(100))
+    doi = Column(String(100))
+    ZTCLS = Column(String(100))
     state = Column(Boolean)
 
     # year issue url title createtime updatetime content
