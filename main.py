@@ -39,7 +39,7 @@ class Spider(object):
                                'Origin': 'http://navi.cnki.net',
                                })
         self.lid = ''
-        self.state = True
+        # self.state = True
         self.start_url = dest_url
         logger.info("start_url: {}".format(self.start_url))
         # 期刊名字
@@ -100,9 +100,11 @@ class Spider(object):
             else:
                 return r
         except Exception, e:
-            logger.error('{}, {},{}'.format(e, url, e.message))
-            self.state = False
-            return False
+            # self.state = False
+            kwargs['state'] = False
+            logger.error('state == False {}, {},{}'.format(e, url, e.message))
+
+        return False
 
     def onstart(self):
         """
@@ -147,6 +149,7 @@ class Spider(object):
             "pIdx": 0,
         }
         params.update(query)
+        query['state']= True
         self.crawl_url(url, 'get', params, self.on_yearissuepage_list,
                        os.path.join(config.dest_folder, self.periodcical_name), **query)
 
@@ -191,7 +194,6 @@ class Spider(object):
 
         doc = pq(unicode(response.content, "utf-8"))
         doc.make_links_absolute("http://navi.cnki.net/knavi/")
-
         for each in doc(".yearissuepage> .s-dataList").items():
 
             yearlstdoc = pq(each)
@@ -251,8 +253,9 @@ class Spider(object):
             f.write(response.content)
             f.close()
         except Exception, e:
-            self.state=False
-            logger.error('write file error: ' + title + e)
+            # self.state = False
+            kwargs['state']=False
+            logger.error('state == False,write file error: ' + title + e)
             try:
                 f = open('download.pdf', 'wb')
                 f.write(response.content)
@@ -309,7 +312,10 @@ class Spider(object):
         # 下载 pdf
         self.deal_pdf_page(url, savefolder, filename=title)
         # "=======pdf"
-        if self.state == False:
+        # state ==Flase
+        # if kwargs.has_key('state') and (not kwargs['state']):
+        #     return
+        if not kwargs['state']:
             return
 
         result = {
@@ -320,13 +326,13 @@ class Spider(object):
             'author': author,
             'url': url,
             # 'content': content,
-            'pdf': os.path.join(savefolder + title + '.pdf'),
+            'pdf': '1',#os.path.join(savefolder + title + '.pdf'),
             'summary': summary,
             'organization': organization,
             'keyword': keyword,
             'year': kwargs['year'],
             'issue': kwargs['issue'],
-            'state': self.state
+            'state': kwargs['state']
         }
         # utils.append_to_csv("{}/{}.csv".format(savefolder, self.periodcical_name), result)
 
@@ -334,6 +340,8 @@ class Spider(object):
         csv_path = savefolder + "/" + self.periodcical_name + "-" + str(kwargs['year']) + "-" + kwargs['issue'] + ".csv"
         utils.append_to_csv(csv_path, result)
         utils.save_crawl_result(self.model, result)
+        logger.info("download success, sleep {} sec!!".format(int(config.download_pdf_interval)))
+        time.sleep(int(config.download_pdf_interval))
 
     # utils.append_to_csv("/tmp/accc.cav",result)
     # 保存当前目录

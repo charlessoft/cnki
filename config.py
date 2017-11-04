@@ -25,6 +25,9 @@ dbpath = 'sqlite:///./res/spider.db'
 # 间隔5小时继续跑
 interval = 900
 
+# 下载pdf 间隔
+download_pdf_interval = 10
+
 
 # 配置爬虫地址 for v1(
 #dest_url = "http://navi.cnki.net/knavi/JournalDetail?pcode=CJFD&pykm=ZGDC"
