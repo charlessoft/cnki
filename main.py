@@ -18,6 +18,7 @@ from logconfig import logger
 
 import models
 
+skip_download_pdf=True
 debug = False
 if debug:
     # proxy = '10.211.55.12:8888'
@@ -102,7 +103,9 @@ class Spider(object):
         except Exception, e:
             # self.state = False
             kwargs['state'] = False
-            logger.error('state == False {}, {},{}'.format(e, url, e.message))
+            logger.error("state = False")
+            logger.error(u'!!!{}, {},{}'.format(e, url, e.message))
+            # logger.error("state = False " + e + " " + url + " " + e.message)
 
         return False
 
@@ -198,8 +201,15 @@ class Spider(object):
 
             yearlstdoc = pq(each)
             year = yearlstdoc("em").text()
+            if year in config.filter_year_lst:
+                logger.info("{} in fileter,continue".format(year))
+                continue
             for item in yearlstdoc("a").items():
                 No = item.text()
+                if No in config.filter_No_list:
+                    logger.info("{} in filter NO list ,continue".format(No))
+                    continue
+
                 url = "http://navi.cnki.net/knavi/JournalDetail/GetArticleList?year={}&issue={}&pykm={}&pageIdx=0".format(
                     year,
                     No[3:], kwargs['pykm'])
@@ -235,6 +245,8 @@ class Spider(object):
         """
         title = self.validateTitle(kwargs['filename']) + ".pdf"
         filename = u'{}'.format(os.path.join(savefolder, title))
+        logger.info("pdf filename save path =====:{}".format(filename))
+
         # logger.error (response.status_code)
         filelen = response.headers.get('Content-Length', 1000)
         logger.info("len: {} ".format(filelen))
@@ -255,7 +267,8 @@ class Spider(object):
         except Exception, e:
             # self.state = False
             kwargs['state']=False
-            logger.error('state == False,write file error: ' + title + e)
+            logger.error('state = False,')
+            logger.error('write file error: ' + title + e)
             try:
                 f = open('download.pdf', 'wb')
                 f.write(response.content)
@@ -310,7 +323,8 @@ class Spider(object):
         # "=======pdf"
         # self.crawl_url(pdf_url, "get", '', self.down_pdf, savefolder,filename=title)
         # 下载 pdf
-        self.deal_pdf_page(url, savefolder, filename=title)
+        if not skip_download_pdf:
+            self.deal_pdf_page(url, savefolder, filename=title)
         # "=======pdf"
         # state ==Flase
         # if kwargs.has_key('state') and (not kwargs['state']):
@@ -410,6 +424,7 @@ class Spider(object):
         self.getlogo_gif()
 
         self.post_detail_url()
+        logger.info("start_download_pdf savefolder:{}".format(savefolder))
 
         self.start_download_pdf(savefolder, **kwargs)
 
