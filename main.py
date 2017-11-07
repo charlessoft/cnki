@@ -247,7 +247,7 @@ class Spider(object):
         """
         title = self.validateTitle(kwargs['filename']) + ".pdf"
         filename = u'{}'.format(os.path.join(savefolder, title))
-        logger.info("pdf filename save path =====:{}".format(filename))
+        logger.info(u"pdf filename save path =====:{}".format(filename))
 
         # logger.error (response.status_code)
         filelen = response.headers.get('Content-Length', 1000)
