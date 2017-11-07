@@ -19,7 +19,7 @@ from logconfig import logger
 import models
 import traceback
 
-skip_download_pdf=True
+skip_download_pdf=False
 debug = False
 if debug:
     # proxy = '10.211.55.12:8888'
@@ -426,7 +426,7 @@ class Spider(object):
         self.getlogo_gif()
 
         self.post_detail_url()
-        logger.info("start_download_pdf savefolder:{}".format(savefolder))
+        logger.info(u"start_download_pdf savefolder:{}".format(savefolder))
 
         self.start_download_pdf(savefolder, **kwargs)
 
