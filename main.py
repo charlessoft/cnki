@@ -17,6 +17,7 @@ import utils
 from logconfig import logger
 
 import models
+import traceback
 
 skip_download_pdf=True
 debug = False
@@ -104,6 +105,7 @@ class Spider(object):
             # self.state = False
             kwargs['state'] = False
             logger.error("state = False")
+            traceback.print_exc()
             logger.error(u'!!!{}, {},{}'.format(e, url, e.message))
             # logger.error("state = False " + e + " " + url + " " + e.message)
 
