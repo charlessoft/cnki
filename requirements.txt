@@ -8,4 +8,4 @@ pyquery==1.2.17
 requests==2.18.4
 SQLAlchemy==1.1.14
 unicodecsv==0.14.1
-urllib3==1.22
+urllib3==1.26.5
